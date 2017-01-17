@@ -127,14 +127,14 @@ function http.listen(domain, handler)
                request.body = {}
                for i = 2,#elts-1 do
                   -- Parse content disposition:
-                  local _,_,type,data = elts[i]:find('..Content%-Disposition%:%s*(.-)%;%s*(.*)\r\n%-%-$')
+                  local _,_,type,data = elts[i]:lower():find('..content%-disposition%:%s*(.-)%;%s*(.*)\r\n%-%-$')
 
                   -- Parse form data
                   if type == 'form-data' then
                      local _,last,name,fname = data:find('name="(.-)"(.-)\r\n')
                      local _,_,filename = fname:find('filename="(.-)"$')
                      data = data:sub(last+1,#data)
-                     local _,last,contentType = data:find('^Content%-Type:%s*(.-)\r\n')
+                     local _,last,contentType = data:lower():find('^content%-type:%s*(.-)\r\n')
                      if contentType then
                         data = data:sub(last+1,#data)
                      end
